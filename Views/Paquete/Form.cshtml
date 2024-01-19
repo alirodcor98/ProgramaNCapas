@@ -1,0 +1,51 @@
+﻿@model ML.Paquete
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hr />
+<div class="d-flex justify-content-center">
+    <h2>Formulario de paquetes</h2>
+</div>
+<hr />
+
+@using (Html.BeginForm("Form", "Paquete", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(model => model.IdPaquete)
+                @Html.HiddenFor(model => model.NumeroGuia)
+                @Html.HiddenFor(model => model.FechaEstimadaEntrega)
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.InstruccionEntrega)
+                        @Html.TextAreaFor(model => model.InstruccionEntrega, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Peso)
+                        @Html.TextBoxFor(model => model.InstruccionEntrega, new {@class="form-control"})
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.DireccionOrigen)
+                        @Html.TextBoxFor(model => model.DireccionOrigen, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.DireccionEntrega)
+                        @Html.TextBoxFor(model => model.DireccionEntrega, new {@class="form-control"})
+                    </div>
+                </div>
+
+                <br />
+                <div class="row d-grid gap-2 col-6 mx-auto">
+                    @if (Model.IdPaquete != 0)
+                    {
+                        <input type="submit" class="btn btn-info" value="Actualizar" />
+                    }
+                    else
+                    {
+                        <input type="submit" class="btn btn-success" value="Agregar"/>
+                    }
+                    <a href="@Url.Action("GetAll", "Paquete")" class="btn btn-danger"><i class="bi bi-x-circle-fill"> Cancelar</i></a>
+                </div>
+            }

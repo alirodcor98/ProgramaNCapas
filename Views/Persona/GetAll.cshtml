@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2 class="text-center">Ajax y JQuery</h2>
+    <hr />
+</div>
+
+<div>
+    <h2 class="text-center">Ejercicio 1</h2>
+    <button id="boton" class="limpiar btn border border-black" onclick="cambiarColorBoton()">Cambiar color</button>
+    <button class="limpiar btn border border-black">No cambia nada</button>
+    <input id="input" class="limpiar" type="text" onmouseout="cambiarColorInput()"/>
+    <button class="btn btn-info" onclick="limpiar()">Limpiar</button>
+    <hr />
+</div>
+
+<div class="d-flex flex-row w-100 justify-content-between">
+    <h2 class="text-center">Ejercicio 2</h2>
+    <button class="btn btn-success" onclick="mostrarInfo()">Mostrar tabla de datos</button>
+</div>
+
+<div>
+    <table class="table table-bordered">
+        <thead class="thead-black">
+            <tr class="text-center">
+                <th>Genero</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Estado</th>
+                <th>Pais</th>
+                <th>Email</th>
+                <th>UserName</th>
+            </tr>
+        </thead>
+        <tbody id="mostrarInfo">
+            
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function cambiarColorBoton() { 
+        $("#boton").css("background-color", "green");
+    }
+    function cambiarColorInput() {
+        $("#input").css("background-color", "orange");
+    }
+    function limpiar() {
+        $(".limpiar").css("background-color", "white");
+    }
+    function mostrarInfo() {
+        $.ajax({
+            url: 'https://randomuser.me/api/',
+            dataType: 'json',
+            success: function (data) {
+                $("#tbodyProducto").html('');
+                var valor = "<tr><td>" + data.results[0].gender + "</td>" +
+                    "<td>" + data.results[0].name.first + "</td>" +
+                    "<td>" + data.results[0].name.last + "</td>" +
+                    "<td>" + data.results[0].location.state + "</td>" +
+                    "<td>" + data.results[0].location.country + "</td>" +
+                    "<td>" + data.results[0].email + "</td>" +
+                    "<td>" + data.results[0].login.username + "</td></tr>";
+                $(valor).appendTo("#mostrarInfo");
+            }
+        });
+    }
+</script>
+
+

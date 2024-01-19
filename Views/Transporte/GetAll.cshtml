@@ -1,0 +1,56 @@
+﻿@model ML.Transporte
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="text-center">Lista de transportes</h1>
+    <h5>Selecciones agregar para insertar un nuevo transporte a la lista</h5>
+    <hr />
+</div>
+
+<div>
+    <a href="@Url.Action("Form", "Transporte")" class="btn btn-lg btn-success float-end">Agregar</a>
+</div>
+
+@if(Model == null)
+            {
+                <div class="alert-warning" role="alert">
+                    Ocurrio un error!
+                </div>
+            }
+else
+            {
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Editar</th>
+                                <th>Id Transporte</th>
+                                <th>Numero de placa</th>
+                                <th>Modelo</th>
+                                <th>Marca</th>
+                                <th>Año de fabricación</th>
+                                <th>Estatus</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(ML.Transporte elemento in Model.Transportes)
+                                {
+                                    <tr class="text-center">
+                                        <td><a href="@Url.Action("Form", "Transporte", new {IdTransporte = elemento.IdTransporte})" class="btn btn-warning">Editar</a></td>
+                                        <td>@elemento.IdTransporte</td>
+                                        <td>@elemento.NumeroPlaca</td>
+                                        <td>@elemento.Modelo</td>
+                                        <td>@elemento.Marca</td>
+                                        <td>@elemento.AnioFabricacion</td>
+                                        <td>@elemento.Estatus.Estatus</td>
+                                        <td><a href="@Url.Action("Delete", "Transporte", new {IdTransporte = elemento.IdTransporte})" class="btn btn-danger">Eliminar</a></td>
+                                    </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            }

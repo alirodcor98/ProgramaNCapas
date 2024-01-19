@@ -1,0 +1,132 @@
+﻿@model ML.ResultExcel
+@{
+    ViewBag.Title = "Carga";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <h2>Carga de archivos</h2>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="col-md-6 justify-content-center mx-auto" style="width: 200px;" onclick="textCharge()">
+        <input type="submit" class="btn btn-lg btn-success" value="Cargar archivo txt"/>
+    </div>
+    <div class="col-md-6 justify-content-center mx-auto" style="width: 200px;" onclick="excelCharge()">
+        <input type="submit" class="btn btn-lg btn-info" value="Cargar archivo xlsx"/>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-6 justify-content-center mx-auto" style="width: 450px; display: none" id="texto">
+        @using (Html.BeginForm("Carga", "CargaMasiva", FormMethod.Post, new { enctype = "multipart/form-data", @class = "login" }))
+        {
+            <input type="file" name="txt" onchange="validateFileTxt()" id="txt" accept=".txt"/>
+            <input type="submit" class="btn btn-success" value="Cargar txt" />
+        }
+    </div>
+    <div class="col-md-6 justify-content-center mx-auto" style="width: 450px; display: none" id="excel">
+        @using (Html.BeginForm("Carga", "CargaMasiva", FormMethod.Post, new { enctype = "multipart/form-data", @class = "login" }))
+        {
+            <input type="file" name="xlsx" onchange="validateFileXls()" id="xls" accept=".xls,.xlsx" />
+
+            if (Model == null)
+            {
+                <input type="submit" id="validar" class="btn btn-info" value="Validar xlsx" />
+            }
+            else
+            {
+                if (Model.Objects.Count == 0 || Model.Objects == null)
+                {
+                    <input type="submit" id="validar" class="btn btn-info" value="Cargar xlsx" />
+                }
+                else
+                {
+                    <input type="submit" id="validar" class="btn btn-info" value="Validar xlsx" />
+
+                    <br />
+                    <hr />
+                    <h3>Tabla de errores</h3>
+                    <hr />
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table align-middle table-striped table-bordered">
+                            <thead class="">
+                                <tr class="text-center">
+                                    <th>Id de registro</th>
+                                    <th>Errores</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.ResultExcel error in Model.Objects)
+                                {
+                                    <tr class="text-center">
+                                        <td>@error.IdRegistro</td>
+                                        <td>@error.Mensaje</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+
+        }
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function validateFileTxt() {
+        var allowedExtension = ['txt'];
+        var fileExtension = document.getElementById('txt').value.split('.').pop().toLowerCase();
+        var isValidFile = false;
+
+        for (var index in allowedExtension) {
+
+            if (fileExtension === allowedExtension[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+            document.getElementById('txt').value = "";
+        }
+
+        return isValidFile;
+    }
+    function validateFileXls() {
+        var allowedExtension = ['xls','xlsx'];
+        var fileExtension = document.getElementById('xls').value.split('.').pop().toLowerCase();
+        var isValidFile = false;
+
+        for (var index in allowedExtension) {
+
+            if (fileExtension === allowedExtension[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+            document.getElementById('xls').value = "";
+        }
+
+        return isValidFile;
+    }
+
+    function textCharge() {
+        document.getElementById('texto').style.display = 'block';
+        document.getElementById('excel').style.display = 'none';
+    }
+
+    function excelCharge() {
+        document.getElementById('texto').style.display = 'none';
+        document.getElementById('excel').style.display = 'block';
+    }
+
+</script>
+

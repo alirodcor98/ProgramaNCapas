@@ -1,0 +1,141 @@
+﻿@model ML.Repartidor
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2>Formulario de usuario</h2>
+    <hr />
+</div>
+
+@using (Html.BeginForm("Form", "Repartidor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.Usuario.IdUsuario)
+    @Html.HiddenFor(model => model.FechaIngreso)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.Nombre)
+            @Html.TextBoxFor(model => model.Usuario.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.ApellidoPaterno)
+            @Html.TextBoxFor(model => model.Usuario.ApellidoPaterno, new { @class = "form-control", @placeholder = "Apellido Paterno" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.Password)
+            @Html.PasswordFor(model => model.Usuario.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.FechaNacimiento)
+            @Html.TextBoxFor(model => model.Usuario.FechaNacimiento, new { @class = "form-control", @id = "datepicker", @autocomplete = "false" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.Telefono)
+            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "form-control", @placeholder = "Telefono" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Transporte.IdTransporte)
+            @Html.DropDownListFor(model => model.Transporte.IdTransporte, new SelectList(Model.Transporte.Transportes, "IdTransporte", "NumeroPlaca"), "Seleccionar placas del vehiculo asignado", new {@class="form-control"})
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.Sexo)
+            <br />
+            @Html.RadioButtonFor(model => model.Usuario.Sexo, "H") @Html.Label("Hombre")
+            @Html.RadioButtonFor(model => model.Usuario.Sexo, "M") @Html.Label("Mujer")
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.UserName)
+            @Html.TextBoxFor(model => model.Usuario.UserName, new { @class = "form-control", @placeholder = "UserName" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Usuario.Email)
+            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "form-control", placeholder = "Email" })
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @Html.Label("Imagen")
+            <input id="amd" type="file" name="amd" class="form-control" onchange="validateFile(), readURL(this)"/>
+            @if(Model.Usuario.Imagen == null || Model.Usuario.Imagen.Length == 0)
+                {
+                    <img id="img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png" height="150" width="150"/>
+                }
+            else
+                {
+                    <img src="data:image/*;base64,@Convert.ToBase64String(Model.Usuario.Imagen)" height="150" width="150"/>
+                }
+        </div>
+    </div>
+    <br />
+    <div class="row d-grid gap-2 col-6 mx-auto">
+        @if(Model.Usuario.IdUsuario != 0)
+                {
+                    <input type="submit" value="Actualizar" class="btn btn-info"/>
+                }
+        else
+                {
+                    <input type="submit" value="Agregar" class="btn btn-success"/>
+                }
+        <a href="@Url.Action("GetAll", "Repartidor")", class="btn btn-danger"><i class="bi bi-x-circle-fill"> Cancelar</i></a>
+    </div>
+}
+
+
+@Scripts.Render("~/bundles/jquery")
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat: 'dd-mm-yy',
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "clip"
+        });
+    });
+
+    function validateFile() {
+        var allowedExtension = ['jpeg', 'jpg', 'png'];
+        var fileExtension = document.getElementById('amd').value.split('.').pop().toLowerCase();
+        var isValidFile = false;
+
+        for (var index in allowedExtension) {
+
+            if (fileExtension === allowedExtension[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+            document.getElementById('amd').value = "";
+        }
+
+        return isValidFile;
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result);
+
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

@@ -1,0 +1,71 @@
+﻿@model ML.Paquete
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hr />
+<div class="d-flex justify-content-center">
+    <h2>Lista de paquetes</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <h5>Seleccione Agregar para agregar un nuevo paquete</h5>
+</div>
+<hr />
+
+<div>
+    <a href="@Url.Action("Form", "Paquete")" class="btn btn-lg btn-success float-end"><i class="bi bi-person-fill-add"> Agregar</i></a>
+</div>
+
+
+
+@if(Model == null)
+            {
+                <div class="alert alert-warning" role="alert">
+                    Ocurrio un error al cargar los datos!
+                </div>
+            }
+
+else
+            {
+                <br />
+                <br />
+                <br />
+                <div class="col-sm-12 table-responsive">
+                    <table class="table align-middle table-striped table-bordered" id="tabla">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Editar</th>
+                                <th>Instrucciones de entrega</th>
+                                <th>Peso</th>
+                                <th>Direccion Origen</th>
+                                <th>Direccion Entrega</th>
+                                <th>Fecha estimada de entrega</th>
+                                <th>Numero guia</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(ML.Paquete paquete in Model.Paquetes)
+                            {
+                                <tr class="text-center">
+                                    <td><a href="@Url.Action("Form", "Paquete", new {IdPaquete=paquete.IdPaquete})" class="btn btn-warning"><i class="bi bi-pencil-fill"> Editar</i></a></td>
+                                    <td>@paquete.InstruccionEntrega</td>
+                                    <td>@paquete.Peso</td>
+                                    <td>@paquete.DireccionOrigen</td>
+                                    <td>@paquete.DireccionEntrega</td>
+                                    <td>@paquete.FechaEstimadaEntrega</td>
+                                    <td>@paquete.NumeroGuia</td>
+                                    <td><a href="@Url.Action("Delete", "Paquete", new {IdPaquete=paquete.IdPaquete})" class="btn btn-danger"><i class="bi bi-trash3-fill"> Eliminar</i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+
+
+
+
+

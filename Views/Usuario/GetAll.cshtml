@@ -1,0 +1,108 @@
+﻿@model ML.Usuario
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="text-center">Lista de usuarios</h1>
+    <h5>Seleccione agregar para insertar un nuevo usuario</h5>
+    <hr />
+</div>
+
+<div>
+    <a href="@Url.Action("Form", "Usuario")" class="btn btn-success btn-lg float-end"><i class="bi bi-person-fill-add"> Agregar</i></a>
+</div>
+
+@using (Html.BeginForm("GetAll", "Usuario", FormMethod.Get, new { enctype = "multipart/form-data" }))
+{
+    <div class="row justify-content-end">
+        <div class="col-md-4">
+            @Html.Label("Busqueda avanzada")
+            @Html.TextAreaFor(model => model.Nombre, new { @class = "form-control", @placeholder="Nombre"})
+            @Html.TextAreaFor(model => model.ApellidoPaterno, new { @class = "form-control", @placeholder="Apellido Paterno" })
+            <input type="submit" class="btn btn-dark" value="Buscar"/>
+        </div>
+    </div>
+}
+
+    @if (Model == null)
+    {
+        <div class="alert alert-warning" role="alert">
+            Ocurrio un error!
+        </div>
+    }
+
+    else
+    {
+        <div class="col-sm-12 table-responsive">
+            <table class="table align-middle table-striped table-bordered" id="tabla">
+                <thead class="">
+                    <tr class="text-center">
+                        <th>Editar</th>
+                        <th>Nombre</th>
+                        <th>Imagen</th>
+                        <th>Tipo Rol</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Contacto</th>
+                        <th>CURP</th>
+                        <th>Sexo</th>
+                        <th>UserName</th>
+                        <th>Direccion</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Usuario usuario in Model.Usuarios)
+                    {
+                        <tr class="text-center">
+                            <td><a href="@Url.Action("Form", "Usuario", new {IdUsuario = usuario.IdUsuario})" class="btn btn-warning"><i class="bi bi-pencil-fill">Editar</i></a></td>
+                            <td>@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
+                            @if (usuario.Imagen == null)
+                            {
+                                <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png" height="50" width="50" /></td>
+                            }
+                            else
+                            {
+                                <td><img src="data:image/*;base64,@Convert.ToBase64String(usuario.Imagen)" height="50" width="50" /></td>
+                            }
+                            <td>@usuario.Rol.Tipo</td>
+                            <td>@usuario.FechaNacimiento</td>
+                            <td>@usuario.Telefono @usuario.Celular @usuario.Email</td>
+                            <td>@usuario.CURP</td>
+                            <td>@usuario.Sexo</td>
+                            <td>@usuario.UserName</td>
+                            <td>@usuario.Direccion.Calle @usuario.Direccion.NumeroExterior, @usuario.Direccion.Colonia.Nombre, @usuario.Direccion.Colonia.Municipio.Nombre, @usuario.Direccion.Colonia.Municipio.Estado.Nombre, @usuario.Direccion.Colonia.Municipio.Estado.Pais.Nombre</td>
+                            <td><a href="@Url.Action("Delete", "Usuario", new {IdUsuario=usuario.IdUsuario})" class="btn btn-danger"><i class="bi bi-trash3-fill">Eliminar</i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.material.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tabla').DataTable({
+                searching: false,
+                "lengthMenu": [[1, 2, 3, 5, -1], [1, 2, 3, 5, "All"]],
+                autoWidth: false,
+                columnDefs: [
+                    {
+                        targets: ['_all'],
+                        className: 'mdc-data-table__cell',
+                    },
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+                },
+
+            });
+        });
+    </script>
+

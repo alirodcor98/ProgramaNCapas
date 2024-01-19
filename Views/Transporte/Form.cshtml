@@ -1,0 +1,54 @@
+﻿@model ML.Transporte
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2>Formulario de transporte</h2>
+    <hr />
+</div>
+
+@using (Html.BeginForm("Form", "Transporte", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.IdTransporte);
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.NumeroPlaca)
+            @Html.TextBoxFor(model => model.NumeroPlaca, new { @class = "form-control", placeholder = "Numero de placa" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Modelo)
+            @Html.TextBoxFor(model => model.Modelo, new { @class = "form-control", placeholder = "Modelo" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Marca)
+            @Html.TextBoxFor(model => model.Marca, new { @class = "form-control", placeholder = "Marca" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.AnioFabricacion)
+            @Html.TextBoxFor(model => model.AnioFabricacion, new { @class = "form-control", placeholder = "Año de fabricación" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Estatus.IdEstatus)
+            @Html.DropDownListFor(model => model.Estatus.IdEstatus, new SelectList(Model.Estatus.EstatusTransportes, "IdEstatus", "Estatus"), "Selecciona un estatus del transporte", new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.IdTransporte != 0)
+        {
+            <input type="submit" class="btn btn-info" value="Actualizar" />
+        }
+        else
+        {
+            <input type="submit" class="btn btn-success" value="Guardar" />
+        }
+        <a href="@Url.Action("GetAll", "Transporte")" class="btn btn-danger">Cancelar</a>
+    </div>
+}
+
+
+

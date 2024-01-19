@@ -1,0 +1,63 @@
+﻿@model ML.Repartidor
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mx-auto" style="width: 300px;">
+    <h2>Lista de Repartidores</h2>
+    <hr />
+</div>
+
+<div>
+    <a href="@Url.Action("Form", "Repartidor")" class="btn btn-success btn-lg float-end"><i class="bi bi-person-fill-add"> Agregar</i></a>
+</div>
+
+<br />
+<br />
+<br />
+
+
+@if (Model == null)
+{
+    <div class="alert alert-warning" role="alert">
+        Ocurrio un error!
+    </div>
+}
+else
+{
+
+<div class="row">
+    @foreach (ML.Repartidor repartidor in Model.Repartidores)
+    {
+
+        <div class="card col-md-4 border-white text-white bg-black">
+            <div class="card-header">
+                <h5 class="card-title">@repartidor.Usuario.Nombre @repartidor.Usuario.ApellidoPaterno </h5>
+            </div>
+            <div class="card-body">
+                @if (repartidor.Usuario.Imagen == null || repartidor.Usuario.Imagen.Length == 0)
+                {
+                    <img class="mx-auto d-block" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png" width="100" height="100" />
+                }
+                else
+                {
+                    <img src="data:image/*;base64,@Convert.ToBase64String(repartidor.Usuario.Imagen)" class="mx-auto d-block" height="100" width="100" />
+                }
+                <br />
+                <p class="card-text" style="margin-top:0; margin-bottom:0;">Fecha de ingreso: @repartidor.FechaIngreso</p>
+                <p class="card-text">Contacto: @repartidor.Usuario.Telefono</p>
+                <h5 class="card-text">Datos del transporte que opera: </h5>
+                <p class="card-text" style="margin-top:0; margin-bottom:0;">Numero de placa: @repartidor.Transporte.NumeroPlaca</p>
+                <p class="card-text" style="margin-top:0; margin-bottom:0;">Modelo: @repartidor.Transporte.Modelo</p>
+                <p class="card-text" style="margin-top:0; margin-bottom:0;">Marca: @repartidor.Transporte.Marca</p>
+                <br />
+                <a href="@Url.Action("Form", "Repartidor", new {IdUsuario=repartidor.Usuario.IdUsuario})" class="btn btn-warning"><i class="bi bi-pencil-fill">Editar</i></a>
+                <a href="@Url.Action("Delete", "Repartidor", new {IdUsuario=repartidor.Usuario.IdUsuario})" class="btn btn-danger"><i class="bi bi-trash3-fill">Eliminar</i></a>
+            </div>
+        </div>
+
+    }
+</div>
+            }
+
